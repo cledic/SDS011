@@ -24,5 +24,5 @@ The python script **sds011_v5.py** read every 5 minutes the sensor and save the 
 
 The python script **sds011_sleep.py** is used at boot time to put the sensor to sleep.
 
-The PHP script **sds011data_v3.php** plot a chart reading the data from the SQLITE DB. See **SDS011_chart.png** for detail. The script plot the PM values and the atmospheric pressure with double Y axes.
+The PHP script **sds011_chart.php** plot a chart reading the data from the SQLITE DB. See **SDS011_chart.png** for detail. The script plot the PM values and the atmospheric pressure with double Y axes.
 
