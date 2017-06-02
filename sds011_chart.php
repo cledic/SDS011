@@ -34,6 +34,12 @@ foreach ($dbh->query($sql) as $row)
 
 $dbh = null;
 
+// Removing the first comma
+$dati_pm25 = substr($dati_pm25, 1);
+$dati_pm10 = substr($dati_pm10, 1);
+$dati_press = substr($dati_press, 1);
+$dati_time = substr($dati_time, 1);
+
 // Format the string for Javascript
 $dati_pm25 = "[".$dati_pm25."],";
 $dati_pm10 = "[".$dati_pm10."],";
