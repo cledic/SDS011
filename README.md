@@ -26,3 +26,4 @@ The python script **sds011_sleep.py** is used at boot time to put the sensor to 
 
 The PHP script **sds011_chart.php** plot a chart reading the data from the SQLITE DB. See **SDS011_chart2.png** for detail. The script plot the PM values and the atmospheric pressure with double Y axes.
 
+The C file **BME280_lib.c** is the library I made to read the BME280 sensor.
