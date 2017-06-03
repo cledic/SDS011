@@ -19,6 +19,19 @@ $stmt = $dbh->prepare("select date as dm from samples  group by date order by da
 $stmt->execute();
 $row = $stmt->fetch();
 $dati_data = $row['dm'];
+$dt_from = $row['dm'];
+
+// First select to read value 24 hours later
+$sql = "select strftime('%H', time) as tm, AVG(pm25) as pm25_avg, AVG(pm10) as pm10_avg, AVG(temp) as temp_avg, AVG(press) as press_avg, AVG(umid) as umid_avg from samples where (date >= date('now','-1 day')) and (time >= strftime('%H', time('now','localtime'))) GROUP BY date(time), strftime('%H', time);";
+
+foreach ($dbh->query($sql) as $row) 
+{
+    #
+    $dati_pm25 = $dati_pm25 . "," . $row['pm25_avg'];
+    $dati_pm10 = $dati_pm10 . "," . $row['pm10_avg'];
+    $dati_press = $dati_press . "," . $row['press_avg'];
+    $dati_time = $dati_time . ",\"h".$row['tm'].":00\"";
+}
 
 // Select the data after averaging the values sampled by an hour
 $sql = "select strftime('%H', time) as tm, AVG(pm25) as pm25_avg, AVG(pm10) as pm10_avg, AVG(temp) as temp_avg, AVG(press) as press_avg, AVG(umid) as umid_avg from samples where (date >= '$dati_data') GROUP BY date(time), strftime('%H', time);";
@@ -29,7 +42,7 @@ foreach ($dbh->query($sql) as $row)
     $dati_pm25 = $dati_pm25 . "," . $row['pm25_avg'];
     $dati_pm10 = $dati_pm10 . "," . $row['pm10_avg'];
     $dati_press = $dati_press . "," . $row['press_avg'];
-    $dati_time = $dati_time . ",\"".$row['tm']."\"";
+    $dati_time = $dati_time . ",\"h".$row['tm'].":00\"";
 }
 
 $dbh = null;
@@ -110,7 +123,7 @@ new Chart(document.getElementById("line-chart"), {
 	  xAxes: [{
       scaleLabel: {
         display: true,
-        labelString: ' Orario ',
+        labelString: ' Letture orarie da ieri a oggi ',
 		fontSize : 22
       }
     }]
@@ -118,7 +131,7 @@ new Chart(document.getElementById("line-chart"), {
     },
     title: {
       display: true,
-      text: 'Valori delle polveri sottili durante il giorno <?php echo $dati_data ?>'
+      text: 'Valori delle polveri sottili e della pressione atmosferica nelle 24h'
     },
 	// Boolean - whether or not the chart should be responsive and resize when the browser does.
 	responsive: true,
